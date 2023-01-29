@@ -8,8 +8,8 @@ const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-//chain multiple request
-router.route("/").post(registerUser).get(protect, allUsers);
+router.route("/").get(protect, allUsers);
+router.route("/").post(registerUser);
 router.post("/login", authUser);
 
 module.exports = router;

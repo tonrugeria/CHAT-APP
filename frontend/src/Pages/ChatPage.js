@@ -1,29 +1,27 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { ChatState } from "../Context/ChatProvider";
+import { Box } from "@chakra-ui/react";
+import SideDrawer from "../components/Authentication/misc/SideDrawer";
+import MyChats from "../components/MyChats";
+import ChatBox from "../components/ChatBox";
 
 const ChatPage = () => {
-  //hooks useState lets you remember information and update it directly
-  //returns the current state and function that updates it
-  const [chats, setChats] = useState([]);
-
-  const fetchChats = async () => {
-    //axios helps you to send async HTTP req to REST endpoints like node.js server and perform CRUD operation
-    const { data } = await axios.get("/api/chat");
-
-    setChats(data);
-  };
-
-  //useEffect() runs when the app renders for the first time
-  useEffect(() => {
-    fetchChats();
-  }, []);
+  const { user } = ChatState();
 
   return (
-    <div>
-      {chats.map((chat) => (
-        //when map method is used, unique key prop must be given
-        <div key={chat._id}>{chat.chatName}</div>
-      ))}
+    <div style={{ width: "100%" }}>
+      {user && <SideDrawer />}
+      <Box
+        display="flex"
+        justifyContent={"space-between"}
+        w="100%"
+        h="91.5vh"
+        p={"10px"}
+      >
+        {user && <MyChats />}
+        {user && <ChatBox />}
+      </Box>
     </div>
   );
 };
