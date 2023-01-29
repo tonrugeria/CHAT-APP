@@ -1,7 +1,5 @@
 # CHAT-APP
 
-# CHAT-APP
-
 Clone the project
 
 ```bash
