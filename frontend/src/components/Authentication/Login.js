@@ -13,21 +13,20 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const [show, setShow] = useState(false);
+  const handleClick = () => setShow(!show);
+  const toast = useToast();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-
-  const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
-  const toast = useToast();
-  const navigate = useNavigate();
 
-  const handleClick = () => setShow(!show);
+  const navigate = useNavigate();
 
   const submitHandler = async () => {
     setLoading(true);
     if (!email || !password) {
       toast({
-        title: "Please Fill all the Fields",
+        title: "Please Fill all the Feilds",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -36,6 +35,7 @@ const Login = () => {
       setLoading(false);
       return;
     }
+
     // console.log(email, password);
     try {
       const config = {
@@ -50,6 +50,7 @@ const Login = () => {
         config
       );
 
+      // console.log(JSON.stringify(data));
       toast({
         title: "Login Successful",
         status: "success",
@@ -59,7 +60,7 @@ const Login = () => {
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
-      navigate.push("/chats");
+      navigate("/chats");
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -70,52 +71,51 @@ const Login = () => {
         position: "bottom",
       });
       setLoading(false);
+      console.log("ERROR", error);
+      console.log("RESPONSE", error.response);
     }
   };
 
   return (
-    <VStack spacing={"5px"} color="black">
+    <VStack spacing="10px">
       <FormControl id="email-login" isRequired>
-        <FormLabel>Email</FormLabel>
+        <FormLabel>Email Address</FormLabel>
         <Input
-          placeholder="Enter Your Email"
           value={email}
+          type="email"
+          placeholder="Enter Your Email Address"
           onChange={(e) => setEmail(e.target.value)}
-        ></Input>
+        />
       </FormControl>
-
       <FormControl id="password-login" isRequired>
         <FormLabel>Password</FormLabel>
-        <InputGroup>
+        <InputGroup size="md">
           <Input
-            type={show ? "text" : "password"}
-            placeholder="Enter Your Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            type={show ? "text" : "password"}
+            placeholder="Enter password"
           />
-          <InputRightElement width={"4.5rem"}>
-            <Button h={"1.75rem"} size="sm" onClick={handleClick}>
+          <InputRightElement width="4.5rem">
+            <Button h="1.75rem" size="sm" onClick={handleClick}>
               {show ? "Hide" : "Show"}
             </Button>
           </InputRightElement>
         </InputGroup>
       </FormControl>
-
       <Button
-        colorScheme={"blue"}
+        colorScheme="blue"
         width="100%"
         style={{ marginTop: 15 }}
         onClick={submitHandler}
         isLoading={loading}
       >
-        Log In
+        Login
       </Button>
-
       <Button
-        variant={"solid"}
-        colorScheme={"red"}
+        variant="solid"
+        colorScheme="red"
         width="100%"
-        style={{ marginTop: 15 }}
         onClick={() => {
           setEmail("guest@example.com");
           setPassword("123456");
